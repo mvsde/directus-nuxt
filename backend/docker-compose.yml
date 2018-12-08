@@ -1,0 +1,29 @@
+version: '3'
+
+volumes:
+  config:
+
+services:
+
+  database:
+    image: mariadb:10
+    container_name: directus-nuxt-database
+    environment:
+      MYSQL_ROOT_PASSWORD: directus
+      MYSQL_DATABASE: directus
+      MYSQL_USER: directus
+      MYSQL_PASSWORD: directus
+
+  suite:
+    build:
+      context: .
+      args:
+        DIRECTUS_VERSION: v7.0.10
+    image: directus-nuxt-suite
+    container_name: directus-nuxt-suite
+    depends_on:
+      - database
+    ports:
+      - 8000:80
+    volumes:
+      - config:/var/www/html/config
